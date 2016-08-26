@@ -46,6 +46,7 @@ class TinyWebBrowser
 
   def greeting
     puts "Hello! Welcome to our browser, #{@user.login}"
+    puts
   end
 
   #def choose_method
