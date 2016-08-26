@@ -57,7 +57,16 @@ class TinyWebBrowser
     file_path
   end
 
-  def method
+  def choose_method
     puts 'Please, choose the method of your request'
+    puts '1 - GET, 2 - POST'
+    choice = gets.chomp.to_i
+    puts
+
+    if choice == 1
+      'GET'
+    elsif choice == 2
+      'POST'
+    end
   end
 end
