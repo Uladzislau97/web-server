@@ -10,9 +10,17 @@ class Server
     loop {
       Thread.start(@server.accept) do |client|
         request = client.read_nonblock(256)
-        request_header, request_body = request.split("\r\n\r\n", 2)
 
-        initial_line = request_header.split("\n").fetch(0)
+        unless request_correct?(request)
+          
+        end
+
+        client.puts answer
+
+        #initial_line = request.split("\n")[0]
+        #method = initial_line[0]
+        #path = initial_line[1][1..-1]
+        #http_version = initial_line[2]
 
         client.close
       end
@@ -30,14 +38,14 @@ class Server
   end
 
   def header_lines_correct?(lines)
-    lines.inject(false) { |result, line| result && header_line_correct?(line) }
+    lines.all? { |line| header_line_correct?(line) }
   end
 
   def request_correct?(request)
     request_header, request_body = request.split("\r\n\r\n", 2)
     request_lines = request_header.split("\n")
     initial_line = request_lines[0]
-    header_lines = request_header[1..-1]
+    header_lines = request_lines[1..-1]
 
     initial_line_correct?(initial_line) && header_lines_correct?(header_lines)
   end
