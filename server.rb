@@ -26,20 +26,7 @@ class Server
       Thread.start(@server.accept) do |client|
         request = client.read_nonblock(256)
 
-        if request_correct?(request)
-          initial_line = request.split("\n")[0]
-
-          method = initial_line[0]
-          path = initial_line[1][1..-1]
-
-          if File.exist?(path)
-
-          else
-            client.puts "HTTP/1.1 404 Not Found\r\n\r\n"
-          end
-        else
-          client.puts "HTTP/1.1 400 Bad Request\r\n\r\n"
-        end
+        client.puts response(request)
 
         client.close
       end
@@ -47,6 +34,40 @@ class Server
   end
 
   private
+
+  def response(request)
+    if request_correct?(request)
+      initial_line = request.split("\n")[0]
+
+      method = initial_line.split(' ')[0]
+      path = initial_line.split(' ')[1][1..-1]
+
+      content_type = content_type(path)
+
+      if File.exist?(path)
+        content = File.read(path)
+
+        response = []
+        response << 'HTTP/1.1 200 OK'
+        response << "Date: #{Time.now}"
+        response << "Content-Type: #{content_type}"
+        response << "Content-Length: #{content.length}"
+        response << "\r\n"
+        response << content
+
+        response.join("\n")
+      else
+        "HTTP/1.1 404 Not Found\r\n\r\n"
+      end
+    else
+      "HTTP/1.1 400 Bad Request\r\n\r\n"
+    end
+  end
+
+  def content_type(path)
+    format = path.split('.')[1]
+    @content_types[format.to_sym]
+  end
 
   def initial_line_correct?(line)
     line.scan(/^ *(?i)(GET|POST) (\/\w+)+(\.\w+) (HTTP\/1\.1) *$/).any?
