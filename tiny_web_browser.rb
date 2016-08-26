@@ -14,7 +14,8 @@ class TinyWebBrowser
 
     @socket = create_socket
     @socket.print request(method, path)
-    puts response
+
+    show_response
 
     close_socket
   end
@@ -93,8 +94,12 @@ class TinyWebBrowser
     request
   end
 
-  def response
-    @socket.read
+  def show_response
+    puts
+    puts '##### Response ###########'
+    puts @socket.read
+    puts '##########################'
+    puts
   end
 
   def close_socket
