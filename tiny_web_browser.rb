@@ -13,10 +13,7 @@ require 'socket'
 
 class TinyWebBrowser
   def initialize
-    #host = 'localhost'
-    #port = 2000
-
-    #@socket = TCPSocket.open(host,port)
+    @socket = create_socket
     @user = User.new
   end
 
@@ -34,6 +31,13 @@ class TinyWebBrowser
       @email = gets.chomp
       puts
     end
+  end
+
+  def create_socket
+    host = 'localhost'
+    port = 2000
+
+    TCPSocket.open(host,port)
   end
 
   #def choose_method
