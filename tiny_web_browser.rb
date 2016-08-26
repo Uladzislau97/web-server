@@ -3,7 +3,6 @@ require 'json'
 
 class TinyWebBrowser
   def initialize
-    @socket = create_socket
     @user = User.new
   end
 
@@ -13,8 +12,11 @@ class TinyWebBrowser
     path = file_path
     method = choose_method
 
-    request(method, path)
+    @socket = create_socket
+    @socket.print request(method, path)
+    puts response
 
+    close_socket
   end
 
   private
@@ -90,4 +92,15 @@ class TinyWebBrowser
 
     request
   end
+
+  def response
+    @socket.read
+  end
+
+  def close_socket
+    @socket.close
+  end
 end
+
+browser = TinyWebBrowser.new
+browser.start
