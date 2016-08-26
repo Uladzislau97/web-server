@@ -18,4 +18,16 @@ class TinyWebBrowser
     @socket = TCPSocket.open(host,port)
   end
 
+  private
+
+  def initialization_of_user
+    puts
+    puts 'Please, enter your login and email'
+    print 'Login: '
+    @login = gets.chomp
+    print 'Email: '
+    @email = gets.chomp
+    puts
+    puts "Welcome to our browser, #{@login}"
+  end
 end
