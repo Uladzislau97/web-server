@@ -51,7 +51,7 @@ class Server
 
         response = []
         response << 'HTTP/1.1 200 OK'
-        response << "Date: #{Time.now}"
+        response << "Date: #{Time.now.asctime}"
         response << "Content-Type: #{content_type}"
         response << "Content-Length: #{content.length}"
 
