@@ -1,15 +1,5 @@
 require 'socket'
-
-#path = '/content/index.htm'
-
-#request = "GET #{path} HTTP/1.0\r\n\r\n"
-
-
-#socket.print(request)
-#response = socket.read
-
-#headers,body = response.split("\r\n\r\n", 2)
-#print body
+require 'json'
 
 class TinyWebBrowser
   def initialize
@@ -19,6 +9,11 @@ class TinyWebBrowser
 
   def start
     greeting
+
+    path = file_path
+    method = choose_method
+
+    request(method, path)
 
   end
 
@@ -68,5 +63,31 @@ class TinyWebBrowser
     elsif choice == 2
       'POST'
     end
+  end
+
+  def request(method, path)
+    request = []
+
+    request << "#{method} #{path} HTTP/1.1"
+    request << "From: #{@user.email}"
+    request << 'User-Agent: Tiny Web Browser'
+
+    if method.upcase == 'POST'
+      params = {:user => {:login => @user.login, :email => @user.email } }
+      body = params.to_json
+
+      request << 'Content-Type: personal info'
+      request << "Content-Length: #{body.length}"
+
+      request = request.join("\n")
+
+      request << "\r\n\r\n"
+      request << body
+    else
+      request = request.join("\n")
+      request << "\r\n\r\n"
+    end
+
+    request
   end
 end
