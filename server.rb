@@ -11,17 +11,21 @@ class Server
       Thread.start(@server.accept) do |client|
         request = client.read_nonblock(256)
 
-        unless request_correct?(request)
-          
+        if request_correct?(request)
+          initial_line = request.split("\n")[0]
+
+          method = initial_line[0]
+          path = initial_line[1][1..-1]
+
+          if File.exist?(path)
+
+          else
+            client.puts "HTTP/1.1 404 Not Found\r\n\r\n"
+          end
+        else
+          client.puts "HTTP/1.1 400 Bad Request\r\n\r\n"
         end
-
-        client.puts answer
-
-        #initial_line = request.split("\n")[0]
-        #method = initial_line[0]
-        #path = initial_line[1][1..-1]
-        #http_version = initial_line[2]
-
+          
         client.close
       end
     }
@@ -30,7 +34,7 @@ class Server
   private
 
   def initial_line_correct?(line)
-    line.scan(/^ *(?i)(GET|POST) (\/\w+)+(\.\w+) (HTTP\/)(2\.0|1\.[10]) *$/).any?
+    line.scan(/^ *(?i)(GET|POST) (\/\w+)+(\.\w+) (HTTP\/1\.1) *$/).any?
   end
 
   def header_line_correct?(line)
