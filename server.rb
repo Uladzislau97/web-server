@@ -26,6 +26,8 @@ class Server
       Thread.start(@server.accept) do |client|
         request = client.read_nonblock(256)
 
+        show_request(request)
+
         client.puts response(request)
 
         client.close
@@ -52,16 +54,25 @@ class Server
         response << "Date: #{Time.now}"
         response << "Content-Type: #{content_type}"
         response << "Content-Length: #{content.length}"
-        response << "\r\n"
-        response << content
 
         response.join("\n")
+
+        response << "\r\n\r\n"
+        response << content
       else
         "HTTP/1.1 404 Not Found\r\n\r\n"
       end
     else
       "HTTP/1.1 400 Bad Request\r\n\r\n"
     end
+  end
+
+  def show_request(request)
+    puts
+    puts '##### Request ############'
+    puts request
+    puts '##########################'
+    puts
   end
 
   def content_type(path)
