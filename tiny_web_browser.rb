@@ -18,6 +18,7 @@ class TinyWebBrowser
   end
 
   def start
+    greeting
 
   end
 
@@ -47,6 +48,12 @@ class TinyWebBrowser
   def greeting
     puts "Hello! Welcome to our browser, #{@user.login}"
     puts
+  end
+
+  def file_path
+    puts 'Please, enter the path to the file, which you want to get (for example: /path/to/file_name.html)'
+    file_path = gets.chomp
+    file_path
   end
 
   #def choose_method
