@@ -55,7 +55,7 @@ class Server
         response << "Content-Type: #{content_type}"
         response << "Content-Length: #{content.length}"
 
-        response.join("\n")
+        response = response.join("\n")
 
         response << "\r\n\r\n"
         response << content
