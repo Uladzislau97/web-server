@@ -28,6 +28,19 @@ class Server
   def header_line_correct?(line)
     line.scan(/^ *[a-zA-Z]+(-[a-zA-Z]+)?: *.* *$/).any?
   end
+
+  def header_lines_correct?(lines)
+    lines.inject(false) { |result, line| result && header_line_correct?(line) }
+  end
+
+  def request_correct?(request)
+    request_header, request_body = request.split("\r\n\r\n", 2)
+    request_lines = request_header.split("\n")
+    initial_line = request_lines[0]
+    header_lines = request_header[1..-1]
+
+    initial_line_correct?(initial_line) && header_lines_correct?(header_lines)
+  end
 end
 
 server = Server.new
