@@ -13,21 +13,30 @@ require 'socket'
 
 class TinyWebBrowser
   def initialize
-    host = 'localhost'
-    port = 2000
-    @socket = TCPSocket.open(host,port)
+    #host = 'localhost'
+    #port = 2000
+
+    #@socket = TCPSocket.open(host,port)
+    @user = User.new
   end
+
+
 
   private
 
-  def initialization_of_user
-    puts
-    puts 'Please, enter your login and email'
-    print 'Login: '
-    @login = gets.chomp
-    print 'Email: '
-    @email = gets.chomp
-    puts
-    puts "Welcome to our browser, #{@login}"
+  class User
+    def initialize
+      puts
+      puts 'Please, enter your login and email'
+      print 'Login: '
+      @login = gets.chomp
+      print 'Email: '
+      @email = gets.chomp
+      puts
+    end
   end
+
+  #def choose_method
+  #  puts 'Please, choose the method of your request'
+  #end
 end
