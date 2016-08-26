@@ -18,6 +18,14 @@ class Server
       end
     }
   end
+
+  private
+
+  def initial_line_correct?(line)
+    line.scan(/^ *(?i)(GET|POST) (\/\w+)+(\.\w+) (HTTP\/)(2\.0|1\.[10]) *$/).any?
+  end
+
+  
 end
 
 server = Server.new
