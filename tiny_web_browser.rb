@@ -53,10 +53,11 @@ class TinyWebBrowser
   def file_path
     puts 'Please, enter the path to the file, which you want to get (for example: /path/to/file_name.html)'
     file_path = gets.chomp
+    puts
     file_path
   end
 
-  #def choose_method
-  #  puts 'Please, choose the method of your request'
-  #end
+  def method
+    puts 'Please, choose the method of your request'
+  end
 end
