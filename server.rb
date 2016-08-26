@@ -4,6 +4,21 @@ class Server
   def initialize
     @port = 2000
     @server = TCPServer.open(@port)
+
+    @content_types = {
+        txt: 'text/plain',
+        doc: 'text/plain',
+        docx: 'text/plain',
+        html: 'text/html',
+        css: 'text/css',
+        js: 'text/javascript',
+        jpg: 'image/jpg',
+        jpeg: 'image/jpeg',
+        png: 'image/png',
+        mp3: 'audio/mp3',
+        mp4: 'video/mp4',
+        avi: 'video/avi'
+    }
   end
 
   def start
@@ -25,7 +40,7 @@ class Server
         else
           client.puts "HTTP/1.1 400 Bad Request\r\n\r\n"
         end
-          
+
         client.close
       end
     }
