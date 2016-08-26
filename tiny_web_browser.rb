@@ -17,11 +17,15 @@ class TinyWebBrowser
     @user = User.new
   end
 
+  def start
 
+  end
 
   private
 
   class User
+    attr_reader :login, :email
+
     def initialize
       puts
       puts 'Please, enter your login and email'
@@ -38,6 +42,10 @@ class TinyWebBrowser
     port = 2000
 
     TCPSocket.open(host,port)
+  end
+
+  def greeting
+    puts "Hello! Welcome to our browser, #{@user.login}"
   end
 
   #def choose_method
