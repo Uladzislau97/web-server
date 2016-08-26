@@ -25,7 +25,9 @@ class Server
     line.scan(/^ *(?i)(GET|POST) (\/\w+)+(\.\w+) (HTTP\/)(2\.0|1\.[10]) *$/).any?
   end
 
-  
+  def header_line_correct?(line)
+    line.scan(/^ *[a-zA-Z]+(-[a-zA-Z]+)?: *.* *$/).any?
+  end
 end
 
 server = Server.new
