@@ -1,28 +1,24 @@
-require 'socket'               # Get sockets from stdlib
+require 'socket'
 
-server = TCPServer.open(2000)  # Socket to listen on port 2000
-loop {                         # Servers run forever
-  client = server.accept       # Wait for a client to connect
-
-  request = client.read
-  request_parts = request.scan(/(?i)(GET|POST) (((\/\w+)*)(\.\w+)) (HTTP\/[12]\.[01])/)
-
-  p request_parts
-
-  if request_parts.empty?
-    puts 'Wrong HTTP request.'
-  else
-    method = request_parts[0]
-    file = request_parts[1]
-
-    if method.upcase == 'GET'
-
-    elsif method.upcase == 'POST'
-
-    end
+class Server
+  def initialize
+    @port = 2000
+    @server = TCPServer.open(@port)
   end
 
-  #client.puts(Time.now.ctime)  # Send the time to the client
-  #client.puts 'Closing the connection. Bye!'
-  client.close                 # Disconnect from the client
-}
+  def start
+    loop {
+      Thread.start(@server.accept) do |client|
+        request = client.read_nonblock(256)
+        request_header, request_body = request.split("\r\n\r\n", 2)
+
+        initial_line = request_header.split("\n").fetch(0)
+
+        client.close
+      end
+    }
+  end
+end
+
+server = Server.new
+server.start
