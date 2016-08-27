@@ -1,11 +1,15 @@
-require 'socket'      # Sockets are in standard library
+require 'socket'
 
 hostname = 'localhost'
 port = 2000
 
 s = TCPSocket.open(hostname, port)
 
-while line = s.gets   # Read lines from the socket
-  puts line.chop      # And print with platform line terminator
+request_header = "GET /content/index.html HTTP/1.1\nsomething: 788 fefe fefe\r\n\r\n45454444"
+
+s.print request_header
+
+while line = s.gets
+  puts line.chop
 end
-s.close               # Close the socket when done
+s.close
