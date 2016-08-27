@@ -1,4 +1,5 @@
 require 'socket'
+require 'json'
 
 class Server
   def initialize
@@ -51,6 +52,16 @@ class Server
 
         response = []
         response << 'HTTP/1.1 200 OK'
+
+        if method.upcase == 'POST'
+          request_body = request.split("\r\n\r\n")[1]
+
+          params = JSON.parse(request_body)
+
+          user_data = "<li>login: #{params['user']['login']}</li><li>e-mail: #{params['user']['email']}</li>"
+          content.gsub!('<%= yield %>', user_data)
+        end
+
         response << "Date: #{Time.now.asctime}"
         response << "Content-Type: #{content_type}"
         response << "Content-Length: #{content.length}"
