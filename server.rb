@@ -64,7 +64,10 @@ class Server
 
         response << "Date: #{Time.now.asctime}"
         response << "Content-Type: #{content_type}"
-        response << "Content-Length: #{content.length}"
+
+        if content_type.split('/')[0] == 'text'
+          response << "Content-Length: #{content.length}"
+        end
 
         response = response.join("\n")
 
